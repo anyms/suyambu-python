@@ -62,7 +62,12 @@ class Suyambu(Shell):
             self.module = self.modules[line]
             self.update_prompt(line)
         except:
-            self.log.error("unknown module '{}'".format(line))
+            self.log.fire("unknown module '{}'".format(line))
+
+    def complete_use(self, text, line, begidx, endidx):
+        mline = line.partition(' ')[2]
+        offs = len(mline) - len(text)
+        return [s[offs:] for s in self.module_names if s.startswith(mline)]
 
     def default(self, line):
         if "do_" + line in dir(self.module):
